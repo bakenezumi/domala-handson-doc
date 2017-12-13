@@ -1,1 +1,1 @@
-https://bakenezumi.github.io/scala_doma
+https://bakenezumi.github.io/domala-handson-doc
