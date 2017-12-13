@@ -6,7 +6,7 @@ Doma勉強会 2017
 
 事前準備
 -----
-次のソフトウェアをインストール
+次のソフトウェアをインストール<!-- .element: style="font-size:80%" -->
 * [JDK8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * [Git](https://git-scm.com/downloads)
 
@@ -14,7 +14,7 @@ Doma勉強会 2017
 
 事前準備
 -----
-[Mac]ターミナルから
+[Mac]ターミナルから<!-- .element: style="font-size:80%; text-align:left; margin-left: 30px" -->
 
 ```sh
 $ git clone https://github.com/bakenezumi/domala-handson
@@ -22,7 +22,7 @@ $ cd domala-handson
 $ chmod 755 bin/sbt
 $ bin/sbt run
 ```
-[Win]コマンドプロンプトから
+[Win]コマンドプロンプトから<!-- .element: style="font-size:80%; text-align:left; margin-left: 30px" -->
 
 ```sh
 > git clone https://github.com/bakenezumi/domala-handson
@@ -35,16 +35,16 @@ $ bin/sbt run
 事前準備
 -----
 
-実行後
-```
+実行後<!-- .element: style="font-size:80%; text-align:left; margin-left: 30px" -->
+```sh
 Domala hands-on Setup is complete.
 [success] Total time: ...
 ```
-と出力されたら準備は完了です
+と出力されたら準備は完了です<!-- .element: style="font-size:80%; text-align:left; margin-left: 30px" -->
 
 
 
-Hands-onの流れ
+Hands-on全容
 -----
 
 1. コンソールアプリを作る
@@ -53,8 +53,9 @@ Hands-onの流れ
   1. 全てHolderにする
 1. REST API Serverを作る
   1. Playアプリへの切り替え
-  1. POST, PUT, DELETEの実装
+  1. Jsonマッピングを修正
   1. 項目追加
+  1. PUTの実装
 
 
 
@@ -85,7 +86,7 @@ domala-handson/
 1.1.  Holder, Entity, Daoを作る
 -----
 
-まずはDomala関連のソースを作ります
+まずはDomala関連のソースを作ります<!-- .element: style="font-size:80%" -->
 
 ```diff
   domala-handson/
@@ -104,20 +105,20 @@ domala-handson/
 
 1.1.  Holder, Entity, Daoを作る - 1
 
-direcroryが無いので作成します<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+direcroryが無いので作成します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-コンソールからcloneしたディレクトリにdomala-handsonに移動しmkdir<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+コンソールからcloneしたディレクトリにdomala-handsonに移動しmkdir<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-[Mac]<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+[Mac]<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```sh
 $ mkdir -p repository/src/main/scala/sample
 ```
 
-[Win]<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+[Win]<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```sh
 domala-handson> mkdir repository\src\main\scala\sample
 ```
-作ったdirectoryにソースを作っていきます<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+作ったdirectoryにソースを作っていきます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 
 
@@ -125,7 +126,7 @@ domala-handson> mkdir repository\src\main\scala\sample
 
 *repository\src\main\scala\sample\ID.scala*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
 package sample
 
@@ -139,7 +140,7 @@ case class ID[ENTITY](value: Long) extends AnyVal
 
 *repository\src\main\scala\sample\Emp.scala*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
 package sample
 
@@ -166,7 +167,7 @@ case class Emp(
 
 *repository\src\main\scala\sample\EmpDao.scala*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
 package sample
 
@@ -210,22 +211,22 @@ trait EmpDao {
 
 1.1.  Holder, Entity, Daoを作る - 5
 
-プロジェクトディレクトリからsbtを起動します<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+プロジェクトディレクトリからsbtを起動します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-[Mac]<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+[Mac]<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```sh
 $ bin/sbt
 ```
-[Win]<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+[Win]<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```sh
 > bin\sbt
 ```
 
-このコマンドでsbtコンソールが立ち上がります<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+このコマンドでsbtコンソールが立ち上がります<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-起動に若干時間がかかるため上げっぱなしでOKです<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+起動に若干時間がかかるため上げっぱなしでOKです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-sbtコンソールからコンパイルします<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+sbtコンソールからコンパイルします<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```sh
 sbt:domala-handson> compile
@@ -246,11 +247,13 @@ SQL[select * from emp where id = /* idd */'']。
 [error] one error found
 [error] (repository/compile:compileIncremental) Compilation failed
 ```
-変数名が間違ってたのでコンパイルが失敗しました<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+変数名が間違ってたのでコンパイルが失敗しました<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-直します<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+直します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-repository\src\main\scala\sample\EmpDao.scala<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+*repository\src\main\scala\sample\EmpDao.scala*
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```diff
 -    "select * from emp where id = /* idd */''"
 +    "select * from emp where id = /* id */''"
@@ -261,17 +264,18 @@ repository\src\main\scala\sample\EmpDao.scala<!-- .element: style="font-size:50%
 1.1.  Holder, Entity, Daoを作る - 7
 ```sh
 sbt:domala-handson> compile
+...
 [success] Total time: ...
 ```
 
-[success]が表示されたらOKです<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+[success]が表示されたらOKです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 
 
 1.2.  Daoを使う
 -----
 
-Domalaで作ったDaoを使ってDBにアクセスします
+Domalaで作ったDaoを使ってDBにアクセスします<!-- .element: style="font-size:80%" -->
 
 ```diff
   domala-handson/
@@ -291,13 +295,15 @@ Domalaで作ったDaoを使ってDBにアクセスします
 
 1.2.  Daoを使う - 1
 
-DBにアクセスする準備としてConfigが必要ですが、このHands-onではprojectに内包しているH2DBを使うように設定済みです<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+DBにアクセスする準備としてConfigが必要ですが、このHands-onではprojectに内包しているH2DBを使うように設定済みです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-実際にはAppConfig.scalaを接続先に合わせて変更してください。また別途JDBCドライバも必要です（sbtではproject-root/libにjarを置けばクラスパスが通ります）<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+実際にはAppConfig.scalaを接続先に合わせて変更してください<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+また別途JDBCドライバも必要です（sbtではproject-root/libにjarを置けばクラスパスが通ります）<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 *src\main\scala\sample\AppConfig.scala*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```
 package sample
 
@@ -321,11 +327,11 @@ object AppConfig extends LocalTransactionConfig(
 
 1.2.  Daoを使う - 2
 
-projectに予め用意してあったSampleApp.scalaからDaoを呼び出すようにします<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+projectに予め用意してあったSampleApp.scalaからDaoを呼び出すようにします<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 *src\main\scala\sample\SampleApp.scala*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```diff
 object SampleApp extends App {
 -   println("""
@@ -356,11 +362,11 @@ object SampleApp extends App {
 
 1.2.  Daoを使う - 3
 
-App {}の中を全て消し、下記内容に書き換えます<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+App {}の中を全て消し、下記内容に書き換えます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 *src\main\scala\sample\SampleApp.scala*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
 package sample
 
@@ -400,7 +406,7 @@ object SampleApp extends App {
 
 1.2.  Daoを使う - 3
 
-sbtコンソールから先ほどのアプリを実行します<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+sbtコンソールから先ほどのアプリを実行します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```sh
 sbt:domala-handson> run
 ```
@@ -419,21 +425,25 @@ Emp(ID(2),allen,21,2)
 [success] Total time: ...
  ```
 
-上のような検索結果と共に[success]が表示されたらOKです<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+上のような検索結果と共に[success]が表示されたらOKです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 
 
 1.3.  全てHolderにする
 -----
-Domalaでは特別な理由がない限りEntityのメンバーは全てHolderにすることを推奨します<!-- .element: style="font-size:50%;" -->
+Domalaでは特別な理由がない限りEntityのメンバーは<!-- .element: style="font-size:60%;" -->
 
-[Doma本家のガイド](http://doma.readthedocs.io/ja/stable/domain/)<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" --><span style="font-size:50%">より抜粋</span><span style="font-size:40%">(ドメインをホルダーに変更しています)</span>
+全てHolderにすることを推奨します<!-- .element: style="font-size:60%;" -->
 
-> ホルダークラスを利用することで、データベース上のカラムの型が同じあっても アプリケーション上意味が異なるものを別の型で表現できます。 これにより意味を明確にしプログラミングミスを事前に防ぎやすくなります。 また、ホルダークラスに振る舞いを持たせることでよりわかりやすいプログラミングが可能です。<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+[Doma本家のガイド](http://doma.readthedocs.io/ja/stable/domain/)<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" --><span style="font-size:60%">より抜粋 </span><span style="font-size:40%">(ドメインをホルダーに変更しています)</span>
+
+> ホルダークラスを利用することで、データベース上のカラムの型が同じあっても アプリケーション上意味が異なるものを別の型で表現できます。 これにより意味を明確にしプログラミングミスを事前に防ぎやすくなります。 また、ホルダークラスに振る舞いを持たせることでよりわかりやすいプログラミングが可能です。<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 
 
 1.3.  全てHolderにする - 1
+
+追加するファイル<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```diff
   domala-handson/
@@ -454,9 +464,11 @@ Domalaでは特別な理由がない限りEntityのメンバーは全てHolder�
 
 1.3.  全てHolderにする - 2
 
-Holderを追加します<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+まずHolderを追加します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-repository\src\main\scala\sample\Name.scala<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+*repository\src\main\scala\sample\Name.scala*
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
 package sample
 
@@ -465,7 +477,7 @@ case class Name(value: String) extends AnyVal
 
 *repository\src\main\scala\sample\Age.scala*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
 package sample
 
@@ -478,11 +490,11 @@ case class Age(value: Int) extends AnyVal {
 
 1.3.  全てHolderにする - 3
 
-作ったHolderを使うようEntityを変更します<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+作ったHolderを使うようEntityを変更します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 *repository\src\main\scala\sample\Emp.scala*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```diff
  @Entity
  case class Emp(
@@ -506,7 +518,11 @@ case class Age(value: Int) extends AnyVal {
 
 1.3.  全てHolderにする - 4
 
-アプリのファクトリ部分を変更します<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+アプリのファクトリ部分を変更します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+*src\main\scala\sample\SampleApp.scala*
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```diff
      val inserted = Seq(
@@ -521,7 +537,7 @@ case class Age(value: Int) extends AnyVal {
 
 1.3.  全てHolderにする - 5
 
-実行します。<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+実行します。<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```diff
  sbt:domala-handson> run
@@ -538,7 +554,9 @@ case class Age(value: Int) extends AnyVal {
 [success] ...
 ```
 
-HolderにしたことでtoStringの内容が変わりました<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+HolderにしたことでtoStringの内容が変わりました<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+コンソールアプリのHands-onは以上になります<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 
 
@@ -546,15 +564,16 @@ HolderにしたことでtoStringの内容が変わりました<!-- .element: sty
 -----
 
   1. Playアプリへの切り替え
-  1. POST, PUT, DELETEの実装
+  1. Jsonマッピングを修正
   1. 項目追加
+  1. PUTの実装
 
 
 
 2.1. Playアプリへの切り替え
 -----
 
-アプリをコンソールからPlayに切り替えます
+アプリをコンソールからPlayに切り替えます<!-- .element: style="font-size:80%" -->
 
 ```diff
   domala-handson/
@@ -583,7 +602,7 @@ HolderにしたことでtoStringの内容が変わりました<!-- .element: sty
 
 2.1.  Playアプリへの切り替え - 1
 
-build.sbtを下記のコメント部を切り替えます<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+build.sbtの下記のコメント部を切り替えます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```diff
 - //lazy val root = (project in file(".")).enablePlugins(PlayScala).settings(
 + lazy val root = (project in file(".")).enablePlugins(PlayScala).settings(
@@ -611,7 +630,7 @@ build.sbtを下記のコメント部を切り替えます<!-- .element: style="f
 
 2.1.  Playアプリへの切り替え - 2
 
-修正後のbuild.sbt<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+修正後のbuild.sbt
 
 ```scala
 lazy val root = (project in file(".")).enablePlugins(PlayScala).settings(
@@ -652,7 +671,7 @@ lazy val metaMacroSettings: Seq[Def.Setting[_]] = Seq(
 
 2.1.  Playアプリへの切り替え - 3
 
-build.sbtを編集した場合、sbtに再度読み込ませる必要があるため再起動します<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+build.sbtを編集した場合、sbtに再度読み込ませる必要があるため再起動します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```sh
 sbt:domala-handson> exit
@@ -664,7 +683,7 @@ $ bin/sbt
 [domala-handson] $
 ```
 
-このようなプロンプトが出力されたらOKです。続いてPlayを実行します<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+このようなプロンプトが出力されたらOKです。続いてPlayを実行します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```diff
  [domala-handson] $ run
@@ -678,30 +697,30 @@ $ bin/sbt
 (Server started, use Enter to stop and go back to the console...)
 ```
 
-9000番ポートでPlayが起動します<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+9000番ポートでPlayが起動します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 
 
 
 2.1.  Playアプリへの切り替え - 4
 
-任意のブラウザから下記URLににアクセスします<!-- .element: style="font-size:50%; text-align:left; margin-left: 90px" -->
+任意のブラウザから下記URLににアクセスします<!-- .element: style="font-size:60%; text-align:left; margin-left: 90px" -->
 
 http://localhost:9000/@evolutions/apply/default?redirect=/employees
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 90px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 90px; margin-bottom: 50px" -->
 
-ブラウザ上に以下JSONが表示されたらOKです<!-- .element: style="font-size:50%; text-align:left; margin-left: 90px" -->
+ブラウザ上に以下JSONが表示されたらOKです<!-- .element: style="font-size:60%; text-align:left; margin-left: 90px" -->
 
 >[{"id":{"value":1},"name":{"value":"SMITH"},"age":{"value":10},"version":1},{"id":{"value":2},"name":{"value":"ALLEN"},"age":{"value":20},"version":1}]
 
-<!-- .element: style="font-size:50%; text-align:left" -->
+<!-- .element: style="font-size:60%; text-align:left" -->
 
 
 
 2.1.  Playアプリへの切り替え - 5
 
-Hands-on用projectにはいくつかPlay用に事前に準備しているファイルがあるためその説明をします<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+Hands-on用projectにはいくつかPlay用に事前に準備しているファイルがあるためその説明をします<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```
   domala-handson/
@@ -723,13 +742,13 @@ Hands-on用projectにはいくつかPlay用に事前に準備しているファ�
 
 *conf/evolutions/default/1.sql*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-PlayにはDBのマイグレーションをアプリケーション起動時に自動的に行う機能があり、その設定となります<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+PlayにはDBのマイグレーションをアプリケーション起動時に自動的に行う機能があり、その設定となります<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-このHands-onでは以下のscriptを流しています<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+このHands-onでは以下のscriptを流しています<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-```
+```sql
 # Users schema
 
 # --- !Ups
@@ -746,7 +765,7 @@ insert into emp (id, name, age, version) values(2, 'ALLEN', 20, 1);
 
 https://www.playframework.com/documentation/2.6.x/Evolutions
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 
 
@@ -754,9 +773,9 @@ https://www.playframework.com/documentation/2.6.x/Evolutions
 
 *conf/application.conf*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-Playの環境情報の設定ファイルです<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+Playの環境情報の設定ファイルです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```sh
 play.http.secret.key = "changeme"
@@ -772,7 +791,7 @@ play.evolutions {
 db {
   default{
     url="jdbc:h2:mem:sample"
-    doma.dialect=org.seasar.doma.jdbc.dialect.H2Dialect # for domala. see sample.SampleModule
+    doma.dialect=org.seasar.doma.jdbc.dialect.H2Dialect # DomaのDialect
     hikaricp.minimumIdle = 10      # 最小DBコネクションプールサイズ
     hikaricp.maximumPoolSize = 10  # 最大DBコネクションプールサイズ
   }
@@ -790,7 +809,7 @@ jdbc.executor {
 
 https://www.playframework.com/documentation/2.6.x/Configuration
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 
 
@@ -798,11 +817,11 @@ https://www.playframework.com/documentation/2.6.x/Configuration
 
 *conf/routes*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-PlayのHTTPルーティングの設定ファイルです<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+PlayのHTTPルーティングの設定ファイルです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-全取得以外のAPIはコメントにしています<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+全取得以外のAPIはコメントにしています<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```sh
 GET     /employees                  sample.SampleController.selectAll
@@ -816,7 +835,7 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 ```
 https://www.playframework.com/documentation/2.6.x/ScalaRouting
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 
 
@@ -824,11 +843,11 @@ https://www.playframework.com/documentation/2.6.x/ScalaRouting
 
 *app/sample/AppConfig.scala*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-DomalaのConfigです<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+DomalaのConfigです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-PlayのDIコンテナが管理するDataSource、Dialectを取得して設定する場合はこのようにします<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+PlayのDIコンテナが管理するDataSource、Dialectを取得して設定する場合はこのようにします<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
 @Singleton
 class AppConfig @Inject() (db: play.api.db.Database, dialect: Dialect) extends LocalTransactionConfig(
@@ -839,7 +858,7 @@ class AppConfig @Inject() (db: play.api.db.Database, dialect: Dialect) extends L
 ```
 https://github.com/bakenezumi/domala/blob/master/notes/specification.md#config-class
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 
 
@@ -847,9 +866,9 @@ https://github.com/bakenezumi/domala/blob/master/notes/specification.md#config-c
 
 *app/sample/SampleModule.scala*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-Dialect、Config、スレッドプールのDI設定をしています<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+Dialect、Config、スレッドプールのDI設定をしています<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```scala
 class SampleModule extends Module {
@@ -878,7 +897,7 @@ class JdbcExecutionContextImpl @Inject()(system: ActorSystem)
 ```
 https://www.playframework.com/documentation/2.6.x/Modules
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 
 
@@ -886,11 +905,11 @@ https://www.playframework.com/documentation/2.6.x/Modules
 
 *app/sample/SampleJsonConverter.scala*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-Entity、及びHolderクラスをJsonへマッピングする定義を行っています<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+Entity、及びHolderクラスをJsonへマッピングする定義を行っています<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-Json.{writes, reads}はPlayが提供するマクロでフィールド名をキーしたJson変換を行ってくれます<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+Json.{writes, reads}はPlayが提供するマクロでフィールド名をキーにしたJson変換を行ってくれます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```scala
 object EmpConverter {
@@ -913,15 +932,19 @@ object EmpConverter {
 ```
 https://www.playframework.com/documentation/2.6.x/ScalaJson
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 
 
-2.2.  Playアプリへの切り替え - 12
+2.1.  Playアプリへの切り替え - 12
 
 *app/sample/SampleController.scala*
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+routeから指定されるAction関数を生成するクラスです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+DIコンテナからConfig、スレッドプールを受け取りインスタンス化されます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```
 @Singleton
@@ -944,5 +967,424 @@ class SampleController @Inject()
 ```
 https://www.playframework.com/documentation/2.6.x/ScalaActions
 
-<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
+
+
+2.2. Jsonマッピングを修正
+-----
+
+Jsonは表示されましたが、Holderのフィールドが露呈しているのはあまりよろしくありません<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+この項では<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+>"id":{"value":1}, "name":{"value":"SMITH"}
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+これを<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+>"id":1", name":"SMITH"
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+こうします<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+
+
+2.2. Jsonマッピングを修正 - 1
+
+*app/sample/SampleJsonConverter.scala*
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+下記のように修正します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+```diff
+object EmpConverter {
+-  implicit def writesID[T] = Json.writes[ID[T]]
+-  implicit def readsID[T] = Json.reads[ID[T]]
++  implicit def writesID[T] = Writes[ID[T]] { case ID(value) => JsNumber(value) }
++  implicit def readsID[T] = Reads[ID[T]] { json => json.validate[Int] map (value => ID[T](value)) }
+
+-  implicit def writesName = Json.writes[Name]
+-  implicit def readsName = Json.reads[Name]
++  implicit def writesName[T] = Writes[Name] { case Name(value) => JsString(value) }
++  implicit def readsName[T] = Reads[Name] { json => json.validate[String] map (value => Name(value)) }
+
+-  implicit def writesAge = Json.writes[Age]
+-  implicit def readsAge = Json.reads[Age]
++  implicit def writesAge[T] = Writes[Age] { case Age(value) => JsNumber(value) }
++  implicit def readsAge[T] = Reads[Age] { json => json.validate[Int] map (value => Age(value)) }
+
+```
+
+
+
+2.2. Jsonマッピングを修正 - 2
+
+Playはrunで実行した場合ホットリロードが働くため、sbtはそのままでブラウザをリロードします<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+>[{"id":1,"name":"SMITH","age":10,"version":1},{"id":2,"name":"ALLEN","age":20,"version":1}]
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+いい感じになりました<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+
+
+2.3. 項目追加
+-----
+
+Empに項目を追加します<!-- .element: style="font-size:80%; margin-left: 30px; margin-bottom: 50px" -->
+
+ 性別 = 男 | 女 | その他
+```diff
+  - repository/
+     - src/main/scala/sample/
+                       - ID.scala
+                       - Emp.scala
+                       - EmpDao.scala
+                       - Name.scala
+                       - Age.scala
++                      - Sex.scala
+```
+
+
+
+2.3.  項目追加 - 1
+
+DB定義の変更<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+*conf/evolutions/default/1.sql*
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+```diff
+# Users schema
+
+# --- !Ups
+ create table emp(
+    id int not null primary key,
+    name varchar(20),
+    age int,
++   sex char(1),
+    version int not null
+ );
+ create sequence emp_id_seq start with 1;
+-insert into emp (id, name, age, version) values(1, 'SMITH', 10, 1);
+-insert into emp (id, name, age, version) values(2, 'ALLEN', 20, 1);
++insert into emp (id, name, age, sex, version) values(1, 'SMITH', 10, 'M', 1);
++insert into emp (id, name, age, sex, version) values(2, 'ALLEN', 20, 'F', 1);
+```
+
+
+
+2.3.  項目追加 - 2
+
+Holderを追加<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+*repository\src\main\scala\sample\Sex.scala*
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+```scala
+package sample
+
+import domala.Holder
+
+@Holder
+sealed abstract class Sex(value: String) 
+object Sex {
+  object Male extends Sex("M")
+  object Female extends Sex("F")
+  object Other extends Sex("O")
+}
+```
+
+
+
+2.3.  項目追加 - 3
+
+作ったHolderを使うようEntityを変更します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+*repository\src\main\scala\sample\Emp.scala*
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+```diff
+ @Entity
+ case class Emp(
+   @Id
+   @GeneratedValue(strategy = GenerationType.SEQUENCE)
+   @SequenceGenerator(sequence = "emp_id_seq")
+   id: ID[Emp],
+   name: Name,
+   age: Age,
++  sex: Sex,
+   @Version
+   version: Int) {
+     def growOld: Emp =
+       this.copy(age = age.grow)
+ }
+```
+
+
+
+2.3. 項目追加 - 4
+
+Jsonへのマッピングにも追加します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+*app/sample/SampleJsonConverter.scala*
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+```diff
+object EmpConverter {
+  ...
+  implicit def writesAge[T] = Writes[Age] { case Age(value) => JsNumber(value) }
+  implicit def readsAge[T] = Reads[Age] { json => json.validate[Int] map (value => Age(value)) }
+
++ implicit def writesSex[T] = Writes[Sex] {
++   case Sex.Male => JsString("Male")
++   case Sex.Female => JsString("Female")
++   case Sex.Other => JsString("Other")
++ }
++ implicit def readsSex[T] = Reads[Sex] { json => json.validate[String] map {
++   case "Male" => Sex.Male
++   case "Female" => Sex.Female
++   case _ => Sex.Other
++ }}
+
+  implicit def writesEmp = Json.writes[Emp]
+  implicit def readsEmp = Json.reads[Emp]
+  ...  
+}
+```
+
+
+
+2.3. 項目追加 - 5
+
+DB定義を変更したのでPlayを再起動します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+```sh
+EnterでPlayを終了後
+[domala-handson] $ exit
+```
+
+```sh
+$ bin/sbt 
+```
+
+```
+[domala-handson] $ run
+```
+
+Play再起動完了後ブラウザをリロードします<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+>[{"id":1,"name":"SMITH","age":10,"sex":"Male","version":1},{"id":2,"name":"ALLEN","age":20,"sex":"Female","version":1}]
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+SMITHにMale、ALLENにFameleが追加されていればOKです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+
+
+2.4. PUTの実装
+-----
+RESTサーバーとしてWebでデータの変更ができるようにします<!-- .element: style="font-size:80%" -->
+
+Hands-onではPUTを実装します<!-- .element: style="font-size:80%" -->
+
+
+
+2.4. PUTの実装 - 1
+
+まずはroutesのコメントを外します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+*conf/routes*
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+```diff
+ GET     /employees                  sample.SampleController.selectAll
+ # GET     /employees/:id              sample.SampleController.selectById(id: Int)
+ # POST    /employees                  sample.SampleController.insert
+-# PUT     /employees/:id              sample.SampleController.update(id: Int)
++PUT     /employees/:id              sample.SampleController.update(id: Int)
+ # DELETE  /employees/:id              sample.SampleController.delete(id: Int)
+```
+
+
+
+2.4. PUTの実装 - 2
+
+Controllerに下のように実装を加えます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+*app/sample/SampleController.scala*
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+```diff
+ @Singleton
+ class SampleController @Inject()
+ (val controllerComponents: ControllerComponents)
+ (implicit config: Config, ec: JdbcExecutionContext) extends BaseController {
+
+   lazy val dao: EmpDao = DaoProvider.get[EmpDao](config)
+   ...
++  // Json request body to Emp
++  private def toEmp(request: Request[AnyContent]) =
++    request.body.asJson.map(_.as[Emp]) // use EmpConverter.readsEmp
++      .getOrElse(throw new RuntimeException("Request body colud not parse"))
+
++  def update(id: Int) = Action.async { request =>
++    Future { Required {
++      dao.update(toEmp(request).copy(id = ID(id)))
++    }} map { result =>
++      Ok(Json.toJson(result))
++    }
++  }
+
+ }
+```
+
+
+
+2.4. PUTの実装 - 3
+
+sbtコンソールとは別のターミナルからcurlで確認してみます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+```sh
+$ curl -X PUT -H "Content-Type: application/json" \
+ -d '{"id": 2, "name": "Allen", "age": 25, "sex": "Female", "version": 1}'\
+ http://localhost:9000/employees/2
+```
+
+```js
+{"count":1,"entity":{"id":2,"name":"Allen","age":25,"sex":"Female","version":2}}
+```
+
+ageが25、versionが2のレスポンスが返ってくればOKです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+GETでも確認してみます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+```sh
+$ curl http://localhost:9000/employees
+[{"id":1,"name":"SMITH","age":10,"sex":"Male","version":1},{"id":2,"name":"Allen","age":25,"sex":"Female","version":2}]
+```
+
+
+
+2.4. PUTの実装 - 4
+
+このAPIの難点はPUTのJsonリクエストボディのidとURLのidがだぶってます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+試しにidを外してリクエストします<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+```sh
+$ curl -X PUT -H "Content-Type: application/json" \
+ -d '{"name": "Allen", "age": 30, "sex": "Female", "version": 2}'\
+ http://localhost:9000/employees/2
+```
+
+```sh
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Execution exception</title>
+        <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z"
+...
+```
+
+エラーがHTMLで返ってきました<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+
+
+2.4. PUTの実装 - 5
+
+domala-handson/logs/application.logをみてみると<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+```
+...
+Caused by: play.api.libs.json.JsResultException: JsResultException(errors:List((/id,List(JsonValidationError(List(error.path.missing),WrappedArray())))))
+at play.api.libs.json.JsReadable.$anonfun$as$2(JsReadable.scala:25)
+	at play.api.libs.json.JsError.fold(JsResult.scala:56)
+...
+```
+
+やはりidがないとだめなようです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+
+
+2.4. PUTの実装 - 6
+
+回避策としてJson.WithDefaultValuesマクロを導入します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+https://github.com/xdotai/play-json-extensions/issues/33
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+*app/sample/SampleJsonConverter.scala*
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+```diff
+ object EmpConverter {
+   ...
+
+   implicit def writesEmp = Json.writes[Emp]
+-  implicit def readsEmp = Json.reads[Emp]
++  implicit def readsEmp = Json.using[Json.WithDefaultValues].format[Emp]
+   ...  
+ }
+```
+
+このようにすることでフィールドにない値にはEmpに設定されたデフォルト値がセットされるようになります<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+\* Scala では case class Hoge(value = -1) のようにコンストラクタパラメータにデフォルト値を設定することができます<!-- .element: style="font-size:40%; text-align:left; margin-left: 30px" -->
+
+
+
+2.4. PUTの実装 - 7
+
+*repository\src\main\scala\sample\Emp.scala*
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+```diff
+ @Entity
+ case class Emp(
+   @Id
+   @GeneratedValue(strategy = GenerationType.SEQUENCE)
+   @SequenceGenerator(sequence = "emp_id_seq")
+-  id: ID[Emp],
++  id: ID[Emp] = ID(-1),
+   name: String,
+   age: Int,
+   @Version
+   version: Int) {
+     def growOld: Emp =
+       this.copy(age = this.age + 1)
+ }
+```
+
+
+
+2.4. PUTの実装 - 8
+
+再度リクエストします<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+```sh
+$ curl -X PUT -H "Content-Type: application/json" \
+ -d '{"name": "Allen", "age": 30, "sex": "Female", "version": 2}'\
+ http://localhost:9000/employees/2
+```
+
+```
+{"count":1,"entity":{"id":2,"name":"Allen","age":30,"sex":"Female","version":3}}
+```
+
+Hands-onの説明はここまでです。POST, DELETEはよかったら各自でやってみてください<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px; margin-top: 70px" -->
+
+
+
+ありがとうございました
