@@ -6,7 +6,7 @@ Doma勉強会 2017
 
 
 
-このHands-onでは[Domala](https://github.com/bakenezumi/domala)の基本的な使い方と、
+このHands-onでは[Domala](https://github.com/bakenezumi/domala)を利用した基本的な開発方法と、
 
 <!-- .element: style="font-size:80%" -->
 
@@ -25,7 +25,7 @@ Domalaについて
 
 DomalaはScala用のDBアクセスライブラリです<!-- .element: style="font-size:80%" -->
 
-内部では[Doma2](https://github.com/domaframework/doma)を利用し
+[Doma2](https://github.com/domaframework/doma)のラッパーであり
 
 <!-- .element: style="font-size:80%" -->
 
@@ -84,7 +84,7 @@ Hands-on全容
   1. Holder, Entity, Daoを作る
   1. Daoを使う
   1. 全てHolderにする
-1. REST API Serverを作る
+1. REST API Serverを作る<!-- .element: style="margin-top: 30px" -->
   1. Playアプリへの切り替え
   1. Jsonマッピングを修正
   1. 項目追加
@@ -232,9 +232,7 @@ import domala.jdbc.Result
 
 @Dao
 trait EmpDao {
-  @Select(
-    "select * from emp where id = /* idd */''"
-  )
+  @Select("select * from emp where id = /* idd */''")
   def selectById(id: ID[Emp]): Option[Emp]
 
   @Select("select * from emp")
