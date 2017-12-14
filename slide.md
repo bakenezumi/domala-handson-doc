@@ -6,7 +6,9 @@ Doma勉強会 2017
 
 
 
-このHands-onではDomalaの基本的な使い方と、<!-- .element: style="font-size:80%" -->
+このHands-onでは[Domala](https://github.com/bakenezumi/domala)の基本的な使い方と、
+
+<!-- .element: style="font-size:80%" -->
 
 [Play Framework](https://www.playframework.com/)での利用方法をガイドします
 
@@ -15,6 +17,23 @@ Doma勉強会 2017
 Doma2は好きだけどScalaはちょっと、、といった方、<!-- .element: style="font-size:80%" -->
 
 ScalaのORM選定に迷っている方を対象に構成しています<!-- .element: style="font-size:80%" -->
+
+
+
+Domalaについて
+-----
+
+DomalaはScala用のDBアクセスライブラリです<!-- .element: style="font-size:80%" -->
+
+内部では[Doma2](https://github.com/domaframework/doma)を利用し
+
+<!-- .element: style="font-size:80%" -->
+
+Scalaから使いやすくしています<!-- .element: style="font-size:80%" -->
+
+https://github.com/bakenezumi/domala
+
+<!-- .element: style="font-size:80%; margin-top: 70px" -->
 
 
 
