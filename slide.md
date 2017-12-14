@@ -94,10 +94,10 @@ domala-handson/
                     - AppConfig.scala
                     - SampleApp.scala
   - repository/
-+     - src/main/scala/sample/
-+                       - ID.scala
-+                       - Emp.scala
-+                       - EmpDao.scala
++    - src/main/scala/sample/
++                      - ID.scala
++                      - Emp.scala
++                      - EmpDao.scala
   - build.sbt
 ```
 
@@ -105,7 +105,7 @@ domala-handson/
 
 1.1.  Holder, Entity, Daoを作る - 1
 
-direcroryが無いので作成します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+directoryが無いので作成します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 コンソールからcloneしたディレクトリにdomala-handsonに移動しmkdir<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
@@ -124,7 +124,7 @@ domala-handson> mkdir repository\src\main\scala\sample
 
 1.1.  Holder, Entity, Daoを作る - 2
 
-*repository\src\main\scala\sample\ID.scala*
+*repository/src/main/scala/sample/ID.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
@@ -138,7 +138,7 @@ case class ID[ENTITY](value: Long) extends AnyVal
 
 1.1.  Holder, Entity, Daoを作る - 3
 
-*repository\src\main\scala\sample\Emp.scala*
+*repository/src/main/scala/sample/Emp.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
@@ -165,7 +165,7 @@ case class Emp(
 
 1.1.  Holder, Entity, Daoを作る - 4
 
-*repository\src\main\scala\sample\EmpDao.scala*
+*repository/src/main/scala/sample/EmpDao.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
@@ -236,7 +236,7 @@ sbt:domala-handson> compile
 
 1.1.  Holder, Entity, Daoを作る - 6
 
-```
+```sh
 [error] <macro>:3:9: [DOMALA4092] [sample.EmpDao.selectById]のSQLの妥当検査に失敗しました
 （[1]行目[38] 番目の文字付近）。詳細は次のものです。[DOMALA4067] 
 SQL内の変数[idd]に対応するパラメータがメソッドに存在しません
@@ -247,11 +247,11 @@ SQL[select * from emp where id = /* idd */'']。
 [error] one error found
 [error] (repository/compile:compileIncremental) Compilation failed
 ```
-変数名が間違ってたのでコンパイルが失敗しました<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+変数名が間違っていたのでコンパイルが失敗しました<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 直します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-*repository\src\main\scala\sample\EmpDao.scala*
+*repository/src/main/scala/sample/EmpDao.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```diff
@@ -301,10 +301,10 @@ DBにアクセスする準備としてConfigが必要ですが、このHands-on�
 
 また別途JDBCドライバも必要です（sbtではproject-root/libにjarを置けばクラスパスが通ります）<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-*src\main\scala\sample\AppConfig.scala*
+*src/main/scala/sample/AppConfig.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
-```
+```scala
 package sample
 
 import domala.jdbc.LocalTransactionConfig
@@ -329,7 +329,7 @@ object AppConfig extends LocalTransactionConfig(
 
 projectに予め用意してあったSampleApp.scalaからDaoを呼び出すようにします<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-*src\main\scala\sample\SampleApp.scala*
+*src/main/scala/sample/SampleApp.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```diff
@@ -364,7 +364,7 @@ object SampleApp extends App {
 
 App {}の中を全て消し、下記内容に書き換えます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-*src\main\scala\sample\SampleApp.scala*
+*src/main/scala/sample/SampleApp.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
@@ -466,7 +466,7 @@ Domalaでは特別な理由がない限りEntityのメンバーは<!-- .element:
 
 まずHolderを追加します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-*repository\src\main\scala\sample\Name.scala*
+*repository/src/main/scala/sample/Name.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
@@ -475,7 +475,7 @@ package sample
 case class Name(value: String) extends AnyVal
 ```
 
-*repository\src\main\scala\sample\Age.scala*
+*repository/src/main/scala/sample/Age.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
@@ -492,7 +492,7 @@ case class Age(value: Int) extends AnyVal {
 
 作ったHolderを使うようEntityを変更します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-*repository\src\main\scala\sample\Emp.scala*
+*repository/src/main/scala/sample/Emp.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```diff
@@ -520,7 +520,7 @@ case class Age(value: Int) extends AnyVal {
 
 アプリのファクトリ部分を変更します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-*src\main\scala\sample\SampleApp.scala*
+*src/main/scala/sample/SampleApp.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
@@ -725,15 +725,15 @@ Hands-on用projectにはいくつかPlay用に事前に準備しているファ�
 ```
   domala-handson/
   - conf/
-      - evolutions/default/
-         - 1.sql
-      - application.conf
-      - routes
+     - evolutions/default/
+        - 1.sql
+     - application.conf
+     - routes
   - app/sample/
-      - AppConfig.scala
-      - SampleModule.scala
-      - SampleJsonConverter.scala
-      - SampleController.scala
+     - AppConfig.scala
+     - SampleModule.scala
+     - SampleJsonConverter.scala
+     - SampleController.scala
 ```
 
 
@@ -907,9 +907,9 @@ https://www.playframework.com/documentation/2.6.x/Modules
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-Entity、及びHolderクラスをJsonへマッピングする定義を行っています<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+Entity、及びHolderクラスをJsonへマッピングするルール定義を行っています<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-Json.{writes, reads}はPlayが提供するマクロでフィールド名をキーにしたJson変換を行ってくれます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+Json.{writes, reads}はPlayが提供するマクロでcase classのフィールド名をキーにしたJson変換を自動的に行ってくれます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```scala
 object EmpConverter {
@@ -942,7 +942,7 @@ https://www.playframework.com/documentation/2.6.x/ScalaJson
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-routeから指定されるAction関数を生成するクラスです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+routesから指定されるAction関数を生成するクラスです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 DIコンテナからConfig、スレッドプールを受け取りインスタンス化されます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
@@ -1009,13 +1009,13 @@ object EmpConverter {
 
 -  implicit def writesName = Json.writes[Name]
 -  implicit def readsName = Json.reads[Name]
-+  implicit def writesName[T] = Writes[Name] { case Name(value) => JsString(value) }
-+  implicit def readsName[T] = Reads[Name] { json => json.validate[String] map (value => Name(value)) }
++  implicit def writesName = Writes[Name] { case Name(value) => JsString(value) }
++  implicit def readsName = Reads[Name] { json => json.validate[String] map (value => Name(value)) }
 
 -  implicit def writesAge = Json.writes[Age]
 -  implicit def readsAge = Json.reads[Age]
-+  implicit def writesAge[T] = Writes[Age] { case Age(value) => JsNumber(value) }
-+  implicit def readsAge[T] = Reads[Age] { json => json.validate[Int] map (value => Age(value)) }
++  implicit def writesAge = Writes[Age] { case Age(value) => JsNumber(value) }
++  implicit def readsAge = Reads[Age] { json => json.validate[Int] map (value => Age(value)) }
 
 ```
 
@@ -1083,7 +1083,7 @@ DB定義の変更<!-- .element: style="font-size:60%; text-align:left; margin-le
 
 Holderを追加<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-*repository\src\main\scala\sample\Sex.scala*
+*repository/src/main/scala/sample/Sex.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
@@ -1106,7 +1106,7 @@ object Sex {
 
 作ったHolderを使うようEntityを変更します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-*repository\src\main\scala\sample\Emp.scala*
+*repository/src/main/scala/sample/Emp.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```diff
@@ -1346,7 +1346,7 @@ https://github.com/xdotai/play-json-extensions/issues/33
 
 2.4. PUTの実装 - 7
 
-*repository\src\main\scala\sample\Emp.scala*
+*repository/src/main/scala/sample/Emp.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
