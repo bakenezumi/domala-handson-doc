@@ -2,6 +2,20 @@ Domala Hands-on
 ------
 Doma勉強会 2017
 
+[bakenezumi](https://github.com/bakenezumi)
+
+
+
+このHands-onではDomalaの基本的な使い方と、<!-- .element: style="font-size:80%" -->
+
+[Play Framework](https://www.playframework.com/)での利用方法をガイドします
+
+<!-- .element: style="font-size:80%" -->
+
+Doma2は好きだけどScalaはちょっと、、といった方、<!-- .element: style="font-size:80%" -->
+
+ScalaのORM選定に迷っている方を対象に構成しています<!-- .element: style="font-size:80%" -->
+
 
 
 事前準備
@@ -124,6 +138,14 @@ domala-handson> mkdir repository\src\main\scala\sample
 
 1.1.  Holder, Entity, Daoを作る - 2
 
+[Holder](https://github.com/bakenezumi/domala/blob/master/notes/specification.md#holder-class)は[Doma2のDomain](https://doma.readthedocs.io/ja/stable/domain/)にあたるものです
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+永続化される実際の値を独自型にラップすることでコンパイラチェックやパターンマッチ等、静的型付き言語のメリットを得られやすくなります<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+case classに@Holderを注釈するか、AnyValを継承することで定義できます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
 *repository/src/main/scala/sample/ID.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
@@ -135,8 +157,15 @@ case class ID[ENTITY](value: Long) extends AnyVal
 
 
 
-
 1.1.  Holder, Entity, Daoを作る - 3
+
+[Entity](https://github.com/bakenezumi/domala/blob/master/notes/specification.md#entity-class)はcase classに@Entityを注釈して定義します
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+@Idや@Versionといった[Doma2のEntity](https://doma.readthedocs.io/ja/stable/entity/)と同じアノテーションをフィールドに付与できます
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 *repository/src/main/scala/sample/Emp.scala*
 
@@ -164,6 +193,14 @@ case class Emp(
 
 
 1.1.  Holder, Entity, Daoを作る - 4
+
+[Dao](https://github.com/bakenezumi/domala/blob/master/notes/specification.md#dao-trait)はtraitに@Daoを注釈して定義します
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
+[Doma2のDao](https://doma.readthedocs.io/ja/stable/dao/)とは異なりSQLはアノテーションパラメータに記述します
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 *repository/src/main/scala/sample/EmpDao.scala*
 
@@ -295,7 +332,9 @@ Domalaで作ったDaoを使ってDBにアクセスします<!-- .element: style=
 
 1.2.  Daoを使う - 1
 
-DBにアクセスする準備としてConfigが必要ですが、このHands-onではprojectに内包しているH2DBを使うように設定済みです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+DBにアクセスする準備として[Config](https://github.com/bakenezumi/domala/blob/master/notes/specification.md#config-class)が必要ですが、このHands-onではprojectに内包しているH2DBを使うように設定済みです
+
+<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 実際にはAppConfig.scalaを接続先に合わせて変更してください<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
@@ -845,7 +884,7 @@ https://www.playframework.com/documentation/2.6.x/ScalaRouting
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-DomalaのConfigです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+Playアプリ用DomalaのConfigです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 PlayのDIコンテナが管理するDataSource、Dialectを取得して設定する場合はこのようにします<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 ```scala
@@ -1083,6 +1122,8 @@ DB定義の変更<!-- .element: style="font-size:60%; text-align:left; margin-le
 
 Holderを追加<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
+AnyValは抽象型にできないため@Holderを注釈してHolderを定義します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+
 *repository/src/main/scala/sample/Sex.scala*
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
@@ -1104,7 +1145,7 @@ object Sex {
 
 2.3.  項目追加 - 3
 
-作ったHolderを使うようEntityを変更します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+作ったHolderを持つようEntityを変更します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 *repository/src/main/scala/sample/Emp.scala*
 
@@ -1139,15 +1180,15 @@ Jsonへのマッピングにも追加します<!-- .element: style="font-size:60
 ```diff
 object EmpConverter {
   ...
-  implicit def writesAge[T] = Writes[Age] { case Age(value) => JsNumber(value) }
-  implicit def readsAge[T] = Reads[Age] { json => json.validate[Int] map (value => Age(value)) }
+  implicit def writesAge = Writes[Age] { case Age(value) => JsNumber(value) }
+  implicit def readsAge = Reads[Age] { json => json.validate[Int] map (value => Age(value)) }
 
-+ implicit def writesSex[T] = Writes[Sex] {
++ implicit def writesSex = Writes[Sex] {
 +   case Sex.Male => JsString("Male")
 +   case Sex.Female => JsString("Female")
 +   case Sex.Other => JsString("Other")
 + }
-+ implicit def readsSex[T] = Reads[Sex] { json => json.validate[String] map {
++ implicit def readsSex = Reads[Sex] { json => json.validate[String] map {
 +   case "Male" => Sex.Male
 +   case "Female" => Sex.Female
 +   case _ => Sex.Other
@@ -1276,9 +1317,14 @@ $ curl http://localhost:9000/employees
 
 2.4. PUTの実装 - 4
 
-このAPIの難点はPUTのJsonリクエストボディのidとURLのidがだぶってます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+ただ先ほどのリクエストには難点があり、Jsonリクエストボディのidが無駄です<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-試しにidを外してリクエストします<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+```sh
+{"id": 2, "name": "Allen", "age": 25, "sex": "Female", "version": 1}
+ ^^^^^^^^
+```
+
+試しにリクエストボディからidを外してリクエストします<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```sh
 $ curl -X PUT -H "Content-Type: application/json" \
@@ -1303,7 +1349,7 @@ $ curl -X PUT -H "Content-Type: application/json" \
 
 domala-handson/logs/application.logをみてみると<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-```
+```sh
 ...
 Caused by: play.api.libs.json.JsResultException: JsResultException(errors:List((/id,List(JsonValidationError(List(error.path.missing),WrappedArray())))))
 at play.api.libs.json.JsReadable.$anonfun$as$2(JsReadable.scala:25)
@@ -1311,17 +1357,17 @@ at play.api.libs.json.JsReadable.$anonfun$as$2(JsReadable.scala:25)
 ...
 ```
 
-やはりidがないとだめなようです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+idがないとだめなようです<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 
 
 2.4. PUTの実装 - 6
 
-回避策としてJson.WithDefaultValuesマクロを導入します<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+回避策としてPlayのJson.WithDefaultValuesマクロを使います<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-https://github.com/xdotai/play-json-extensions/issues/33
+https://www.playframework.com/documentation/2.6.x/api/scala/index.html#play.api.libs.json.Json$$DefaultValues
 
-<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+<!-- .element: style="font-size:50%; text-align:left; margin-left: 30px" -->
 
 *app/sample/SampleJsonConverter.scala*
 
@@ -1338,9 +1384,9 @@ https://github.com/xdotai/play-json-extensions/issues/33
  }
 ```
 
-このようにすることでフィールドにない値にはEmpに設定されたデフォルト値がセットされるようになります<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+このようにすることでJsonのフィールドにない値にはEmpのコンストラクタに設定されたデフォルト値がセットされるようになります<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-\* Scala では case class Hoge(value = -1) のようにコンストラクタパラメータにデフォルト値を設定することができます<!-- .element: style="font-size:40%; text-align:left; margin-left: 30px" -->
+\* Scala では case class Hoge(value = -1) のようにパラメータにデフォルト値を設定することができます<!-- .element: style="font-size:40%; text-align:left; margin-left: 30px" -->
 
 
 
@@ -1358,12 +1404,13 @@ https://github.com/xdotai/play-json-extensions/issues/33
    @SequenceGenerator(sequence = "emp_id_seq")
 -  id: ID[Emp],
 +  id: ID[Emp] = ID(-1),
-   name: String,
-   age: Int,
+   name: Name,
+   age: Age,
+   sex: Sex,
    @Version
    version: Int) {
-     def growOld: Emp =
-       this.copy(age = this.age + 1)
+   def growOld: Emp =
+     this.copy(age = age.grow)
  }
 ```
 
