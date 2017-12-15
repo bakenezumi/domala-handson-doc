@@ -122,11 +122,10 @@ domala-handson/
   - src/main/scala/sample
                     - AppConfig.scala
                     - SampleApp.scala
-  - repository/
-+    - src/main/scala/sample/
-+                      - ID.scala
-+                      - Emp.scala
-+                      - EmpDao.scala
++ - repository/src/main/scala/sample/
++                              - ID.scala
++                              - Emp.scala
++                              - EmpDao.scala
   - build.sbt
 ```
 
@@ -810,7 +809,7 @@ create table emp(
     age int,
     version int not null
 );
-create sequence emp_id_seq start with 1;
+create sequence emp_id_seq start with 3;
 insert into emp (id, name, age, version) values(1, 'SMITH', 10, 1);
 insert into emp (id, name, age, version) values(2, 'ALLEN', 20, 1);
 ```
@@ -1122,7 +1121,7 @@ DB定義の変更<!-- .element: style="font-size:60%; text-align:left; margin-le
 +   sex char(1),
     version int not null
  );
- create sequence emp_id_seq start with 1;
+ create sequence emp_id_seq start with 3;
 -insert into emp (id, name, age, version) values(1, 'SMITH', 10, 1);
 -insert into emp (id, name, age, version) values(2, 'ALLEN', 20, 1);
 +insert into emp (id, name, age, sex, version) values(1, 'SMITH', 10, 'M', 1);
@@ -1146,7 +1145,7 @@ package sample
 import domala.Holder
 
 @Holder
-sealed abstract class Sex(value: String) 
+sealed abstract class Sex(val value: String) 
 object Sex {
   object Male extends Sex("M")
   object Female extends Sex("F")
