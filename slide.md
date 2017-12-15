@@ -14,10 +14,6 @@ Doma勉強会 2017
 
 <!-- .element: style="font-size:80%" -->
 
-Doma2は好きだけどScalaはちょっと、、といった方、<!-- .element: style="font-size:80%" -->
-
-ScalaのORM選定に迷っている方を対象に構成しています<!-- .element: style="font-size:80%" -->
-
 
 
 Domalaについて
@@ -29,7 +25,7 @@ DomalaはScala用のDBアクセスライブラリです<!-- .element: style="fon
 
 <!-- .element: style="font-size:80%" -->
 
-Scalaから使いやすくしています<!-- .element: style="font-size:80%" -->
+Scalaから利用しやすくしています<!-- .element: style="font-size:80%" -->
 
 https://github.com/bakenezumi/domala
 
