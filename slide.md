@@ -1398,7 +1398,7 @@ https://www.playframework.com/documentation/2.6.x/api/scala/index.html#play.api.
 
 このようにすることでJsonのフィールドにない値にはEmpのコンストラクタに設定されたデフォルト値がセットされるようになります<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-\* Scala では case class Hoge(value = -1) のようにパラメータにデフォルト値を設定することができます<!-- .element: style="font-size:40%; text-align:left; margin-left: 30px" -->
+\* Scala では case class Foo(value: Int = -1) のようにパラメータにデフォルト値を設定することができます<!-- .element: style="font-size:40%; text-align:left; margin-left: 30px" -->
 
 
 
