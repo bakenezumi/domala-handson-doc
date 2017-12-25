@@ -6,6 +6,15 @@ Doma勉強会 2017
 
 
 
+Change Log
+-----
+- v1.0 - 2017-12-16
+  - Doma勉強会 2017 in Tokyo用に新規作成<!-- .element: style="font-size:80%" -->
+- v1.1 - 2017-12-25
+  - play.api.libs.json.Json.{Reads, Writes}を使ってJsonマッピング定義をしていた箇所をplay.api.libs.json.Json.Format + inmapを使用するように修正<!-- .element: style="font-size:80%" -->
+
+
+
 このHands-onでは[Domala](https://github.com/bakenezumi/domala)を利用した基本的な開発方法と、
 
 <!-- .element: style="font-size:80%" -->
@@ -212,7 +221,7 @@ case class Emp(
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-[Doma2のDao](https://doma.readthedocs.io/ja/stable/dao/)とは異なりSQLはアノテーションパラメータに記述します
+SQLは[Doma2のDao](https://doma.readthedocs.io/ja/stable/dao/)のように外部ファイルに記述することもできますが、アノテーションパラメータに記述することもできます。
 
 <!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
@@ -666,7 +675,7 @@ build.sbtの下記のコメント部を切り替えます<!-- .element: style="f
     name := "domala-handson",
     libraryDependencies ++= Seq(
       "com.h2database" % "h2" % "1.4.196",
-      "com.typesafe.play" %% "play" % "2.6.7"
+      "com.typesafe.play" %% "play" % "2.6.9"
 -     // , guice
 -     // , jdbc
 -     // , evolutions
@@ -693,7 +702,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala).settings(
   name := "domala-handson",
   libraryDependencies ++= Seq(
     "com.h2database" % "h2" % "1.4.196",
-    "com.typesafe.play" %% "play" % "2.6.7"
+    "com.typesafe.play" %% "play" % "2.6.9"
     , guice
     , jdbc
     , evolutions
@@ -707,7 +716,8 @@ lazy val repository = (project in file("repository")).settings(
   )),
   metaMacroSettings,
   libraryDependencies ++= Seq(
-    "com.github.domala" %% "domala" % "0.1.0-beta.7"
+    "org.scalameta" %% "scalameta" % "1.8.0" % Provided,    
+    "com.github.domala" %% "domala" % "0.1.0-beta.8"
   )
 )
 
@@ -960,24 +970,20 @@ https://www.playframework.com/documentation/2.6.x/Modules
 
 Entity、及びHolderクラスをJsonへマッピングするルール定義を行っています<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
-Json.{writes, reads}はPlayが提供するマクロでcase classのフィールド名をキーにしたJson変換を自動的に行ってくれます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
+Json.formatはPlayが提供するマクロでcase classのフィールド名をキーにしたJson変換を自動的に行ってくれます<!-- .element: style="font-size:60%; text-align:left; margin-left: 30px" -->
 
 ```scala
 object EmpConverter {
 
-  implicit def writesID[T] = Json.writes[ID[T]]
-  implicit def readsID[T] = Json.reads[ID[T]]
+  implicit def idFormat[T] = Json.format[ID[T]]
 
-  implicit def writesName = Json.writes[Name]
-  implicit def readsName = Json.reads[Name]
+  implicit val nameFormat = Json.format[Name]
 
-  implicit def writesAge = Json.writes[Age]
-  implicit def readsAge = Json.reads[Age]
+  implicit val ageFormat = Json.format[Age]
 
-  implicit def writesEmp = Json.writes[Emp]
-  implicit def readsEmp = Json.reads[Emp]
+  implicit val empFormat = Json.format[Emp]
 
-  implicit def writesResult = Json.writes[Result[Emp]]
+  implicit val writesResult = Json.writes[Result[Emp]]
 
 }
 ```
@@ -1053,21 +1059,18 @@ Jsonは表示されましたが、Holderのフィールドが露呈している�
 
 ```diff
 object EmpConverter {
--  implicit def writesID[T] = Json.writes[ID[T]]
--  implicit def readsID[T] = Json.reads[ID[T]]
-+  implicit def writesID[T] = Writes[ID[T]] { case ID(value) => JsNumber(value) }
-+  implicit def readsID[T] = Reads[ID[T]] { json => json.validate[Int] map (value => ID[T](value)) }
+-  implicit def idFormat[T] = Json.format[ID[T]]
++  implicit def idFormat[T]: Format[ID[T]] =
++    implicitly[Format[Long]].inmap(v => ID[T](v), { case ID(v) => v })
 
--  implicit def writesName = Json.writes[Name]
--  implicit def readsName = Json.reads[Name]
-+  implicit def writesName = Writes[Name] { case Name(value) => JsString(value) }
-+  implicit def readsName = Reads[Name] { json => json.validate[String] map (value => Name(value)) }
+-  implicit val nameFormat = Json.format[Name]
++  implicit val nameFormat: Format[Name] =
++    implicitly[Format[String]].inmap(v => Name(v), { case Name(v) => v })
 
--  implicit def writesAge = Json.writes[Age]
--  implicit def readsAge = Json.reads[Age]
-+  implicit def writesAge = Writes[Age] { case Age(value) => JsNumber(value) }
-+  implicit def readsAge = Reads[Age] { json => json.validate[Int] map (value => Age(value)) }
-
+-  implicit val ageFormat = Json.format[Age]
++  implicit val ageFormat: Format[Age] = 
++    implicitly[Format[Int]].inmap(v => Age(v), { case Age(v) => v })
+...
 ```
 
 
@@ -1192,22 +1195,20 @@ Jsonへのマッピングにも追加します<!-- .element: style="font-size:60
 ```diff
 object EmpConverter {
   ...
-  implicit def writesAge = Writes[Age] { case Age(value) => JsNumber(value) }
-  implicit def readsAge = Reads[Age] { json => json.validate[Int] map (value => Age(value)) }
+  implicit val ageFormat: Format[Age] = implicitly[Format[Int]].inmap(v => Age(v), { case Age(v) => v })
 
-+ implicit def writesSex = Writes[Sex] {
-+   case Sex.Male => JsString("Male")
-+   case Sex.Female => JsString("Female")
-+   case Sex.Other => JsString("Other")
-+ }
-+ implicit def readsSex = Reads[Sex] { json => json.validate[String] map {
-+   case "Male" => Sex.Male
-+   case "Female" => Sex.Female
-+   case _ => Sex.Other
-+ }}
++ implicit val sexFormat: Format[Sex] =
++   implicitly[Format[String]].inmap({
++     case "Male" => Sex.Male
++     case "Female" => Sex.Female
++     case _ => Sex.Other      
++   }, {
++     case Sex.Male => "Male"
++     case Sex.Female => "Female"
++     case Sex.Other => "Other"
++   })
 
-  implicit def writesEmp = Json.writes[Emp]
-  implicit def readsEmp = Json.reads[Emp]
+  implicit val empFormat = Json.format[Emp]
   ...  
 }
 ```
@@ -1388,10 +1389,8 @@ https://www.playframework.com/documentation/2.6.x/api/scala/index.html#play.api.
 ```diff
  object EmpConverter {
    ...
-
-   implicit def writesEmp = Json.writes[Emp]
--  implicit def readsEmp = Json.reads[Emp]
-+  implicit def readsEmp = Json.using[Json.WithDefaultValues].format[Emp]
+-  implicit val empFormat = Json.format[Emp]
++  implicit val empFormat = Json.using[Json.WithDefaultValues].format[Emp]
    ...  
  }
 ```
